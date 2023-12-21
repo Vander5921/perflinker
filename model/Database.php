@@ -10,9 +10,10 @@ class Database {
             die("Échec de la connexion à la base de données : " . $this->connexion->connect_error);
         }
     }
-
-    public function query($requete) {
-        $resultat = $this->connexion->query($requete);
+    //changement de query en prepare pour protections des injections SQL
+    
+    public function prepare($requete) {
+        $resultat = $this->connexion->prepare($requete);
 
         if (!$resultat) {
             die("Erreur SQL : " . $this->connexion->error);

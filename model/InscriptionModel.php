@@ -50,7 +50,7 @@ class InscriptionModel {
 
     private function validerTelephone($telephone) {
         // Vérifier si le numéro de téléphone contient 10 chiffres
-        if (!preg_match('/^\d{10}$/', $telephone)) {
+        if (!preg_match('/^[a-zA-Z0-9]{10}$/', $telephone)) {
             die("Le numéro de téléphone doit contenir exactement 10 chiffres.");
         }
     }
@@ -62,24 +62,21 @@ class InscriptionModel {
 
         return $age < 18;
     }
-
+    //Utilisation de prepare pour protection injections SQL
     private function verifierInscriptionMultiple($email, $ip) {
-        // Vérifier si une inscription a déjà été faite pour cette adresse IP au cours des 24 dernières heures
-        $requete_verif = "SELECT COUNT(*) as count FROM gpbl 
-                          WHERE email = '$email' AND IP = '$ip' AND creatAt >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
-        $resultat_verif = $this->base_de_donnees->query($requete_verif);
-
-        // Vérifier si la requête s'est exécutée correctement
+        $requete_verif = "SELECT COUNT(*) as count FROM gpbl WHERE email = ? AND IP = ? AND creatAt >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+        $stmt_verif = $this->base_de_donnees->prepare($requete_verif);
+        $stmt_verif->bind_param("ss", $email, $ip);
+        $stmt_verif->execute();
+        $resultat_verif = $stmt_verif->get_result();
+    
         if ($resultat_verif === false) {
-            die("Erreur lors de l'exécution de la requête : " . $this->base_de_donnees->error);
+            die("Erreur lors de l'exécution de la requête : " . $stmt_verif->error);
         }
-
+    
         $row = $resultat_verif->fetch_assoc();
-
-        // Vérifier le nombre d'inscriptions dans les 24 dernières heures
         $nombre_inscriptions_24h = $row['count'];
-
-        // Si une inscription existe déjà, afficher un message d'erreur
+    
         if ($nombre_inscriptions_24h > 0) {
             die("Pas de deux inscriptions en moins de 24 heures.");
         }
@@ -90,25 +87,28 @@ class InscriptionModel {
         return strlen($question) >= 15;
     }
 
+    //Utilisation de prepare pour protection injections SQL
     private function insererOuMettreAJour($prenom, $nom, $genre, $email, $date_naissance, $telephone, $pays, $question, $ip) {
-        // Vérifier si l'utilisateur a déjà une inscription
-        $requete_existence = "SELECT * FROM gpbl WHERE email = '$email' AND IP = '$ip'";
-        $resultat_existence = $this->base_de_donnees->query($requete_existence);
-
-        // Vérifier si la requête s'est exécutée correctement
+        $requete_existence = "SELECT * FROM gpbl WHERE email = ? AND IP = ?";
+        $stmt_existence = $this->base_de_donnees->prepare($requete_existence);
+        $stmt_existence->bind_param("ss", $email, $ip);
+        $stmt_existence->execute();
+        $resultat_existence = $stmt_existence->get_result();
+    
         if ($resultat_existence === false) {
-            die("Erreur lors de l'exécution de la requête : " . $this->base_de_donnees->error);
+            die("Erreur lors de l'exécution de la requête : " . $stmt_existence->error);
         }
-
-        // Si l'utilisateur existe déjà, mettre à jour les données
+    
         if ($resultat_existence->num_rows > 0) {
-            $requete_mise_a_jour = "UPDATE gpbl SET prenom = '$prenom', nom = '$nom', genre = '$genre', birth = '$date_naissance', phone = '$telephone', country = '$pays', question = '$question', updateAt = NOW(), counter = counter + 1 WHERE email = '$email' AND IP = '$ip'";
-            $this->base_de_donnees->query($requete_mise_a_jour);
+            $requete_mise_a_jour = "UPDATE gpbl SET prenom = ?, nom = ?, genre = ?, birth = ?, phone = ?, country = ?, question = ?, updateAt = NOW(), counter = counter + 1 WHERE email = ? AND IP = ?";
+            $stmt_mise_a_jour = $this->base_de_donnees->prepare($requete_mise_a_jour);
+            $stmt_mise_a_jour->bind_param("sssssssss", $prenom, $nom, $genre, $date_naissance, $telephone, $pays, $question, $email, $ip);
+            $stmt_mise_a_jour->execute();
         } else {
-            // Si l'utilisateur n'existe pas, insérer une nouvelle entrée
-            $requete_insertion = "INSERT INTO gpbl (prenom, nom, genre, email, birth, phone, country, question, IP, creatAt, updateAt, counter) 
-                                  VALUES ('$prenom', '$nom', '$genre', '$email', '$date_naissance', '$telephone', '$pays', '$question', '$ip', NOW(), NOW(), 0)";
-            $this->base_de_donnees->query($requete_insertion);
+            $requete_insertion = "INSERT INTO gpbl (prenom, nom, genre, email, birth, phone, country, question, IP, creatAt, updateAt, counter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), 0)";
+            $stmt_insertion = $this->base_de_donnees->prepare($requete_insertion);
+            $stmt_insertion->bind_param("ssssssssss", $prenom, $nom, $genre, $email, $date_naissance, $telephone, $pays, $question, $ip);
+            $stmt_insertion->execute();
         }
     }
 }
