@@ -1,7 +1,7 @@
 <?php
 
-require_once '../model/Database.php';
-require_once '../model/InscriptionModel.php';
+require_once  'C:\wamp64\www\perflinker\model\Database.php';
+require_once  'C:\wamp64\www\perflinker\model\InscriptionModel.php';
 
  
 
@@ -35,8 +35,8 @@ class InscriptionController {
 
 // Configuration de la base de données
 $serveur = 'localhost';
-$utilisateur = 'root'; // Utilisateur de la base de données (à ajuster si nécessaire)
-$mot_de_passe = ''; // Mot de passe de la base de données
+$utilisateur = 'root'; // Utilisateur de la base de données 
+$mot_de_passe = ''; // Mot de passe de la base de données, aucun pour cet exercice
 $base_de_donnees = 'perflinker'; // Nom de la base de données
 
 // Création d'une instance de la classe Database

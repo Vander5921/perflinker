@@ -86,7 +86,7 @@ class InscriptionModel {
         $nombre_inscriptions_24h = $row['count'];
     
         if ($nombre_inscriptions_24h > 0) {
-            die("Pas de deux inscriptions en moins de 24 heures.");
+            die("Pas plus d'une inscription toutes les 24 heures.");
         }
     }
 
@@ -115,7 +115,7 @@ class InscriptionModel {
         } else {
             $requete_insertion = "INSERT INTO gpbl (prenom, nom, genre, email, birth, phone, country, question, IP, creatAt, updateAt, counter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), 0)";
             $stmt_insertion = $this->base_de_donnees->prepare($requete_insertion);
-            $stmt_insertion->bind_param("ssssssssss", $prenom, $nom, $genre, $email, $date_naissance, $telephone, $pays, $question, $ip);
+            $stmt_insertion->bind_param("sssssssss", $prenom, $nom, $genre, $email, $date_naissance, $telephone, $pays, $question, $ip);
             $stmt_insertion->execute();
         }
     }

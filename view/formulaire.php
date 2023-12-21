@@ -21,8 +21,8 @@
         <label for="email">Email :</label>
         <input type="email" name="email" required><br>
 
-        <label for="date_naissance">Date de naissance :</label>
-        <input type="date" id="date_naissance" name="date_naissance" required pattern="\d{1,2}/\d{1,2}/\d{4}" title="Veuillez entrer une date au format jj/mm/aaaa">
+        <label for="date_naissance">Date de Naissance (JJ/MM/AAAA) :</label>
+        <input type="text" name="date_naissance" required><br>
 
         <label for="telephone">Téléphone :</label>
         <input type="tel" name="telephone" required><br>
