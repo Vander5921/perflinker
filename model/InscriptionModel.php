@@ -7,9 +7,17 @@ class InscriptionModel {
         $this->base_de_donnees = $base_de_donnees;
     }
 
+    private function validerEmail($email) {
+        // Vérifier si l'adresse e-mail est valide
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            die("L'adresse e-mail n'est pas valide.");
+        }
+    }
+
     public function inscrire($prenom, $nom, $genre, $email, $date_naissance, $telephone, $pays, $question, $ip) {
         // Valider les données du formulaire
         $this->validerDonnees($prenom, $nom, $question, $telephone);
+        $this->validerEmail($email);
 
         // Convertir la date de naissance en objet DateTime
         $naissance = DateTime::createFromFormat('d/m/Y', $date_naissance);

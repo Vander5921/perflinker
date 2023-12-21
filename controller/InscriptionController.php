@@ -2,6 +2,7 @@
 
 require_once '../model/Database.php';
 require_once '../model/InscriptionModel.php';
+
  
 
 class InscriptionController {
