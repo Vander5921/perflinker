@@ -30,7 +30,8 @@
         }
 
         label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 8px;
             color: #555;
         }
@@ -45,13 +46,18 @@
         }
 
         input[type="radio"] {
-            margin-right: 6px;
+            margin-right: 2px;
+        }
+
+        ::placeholder {
+            color: #999;
+            font-style: italic;
         }
 
         input[type="submit"] {
             background-color: #4caf50;
             color: #fff;
-            padding: 10px;
+            padding: 5px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -65,27 +71,27 @@
 <body>
     <h2>Formulaire d'Inscription</h2>
     <form action="../controller/InscriptionController.php" method="post">
-        <label for="prenom">Prénom :</label>
-        <input type="text" name="prenom" required><br>
+        <label for="prenom" >Prénom :</label>
+        <input type="text" name="prenom" required placeholder="John"><br>
 
-        <label for="nom">Nom :</label>
-        <input type="text" name="nom" required><br>
+        <label for="nom" >Nom :</label>
+        <input type="text" name="nom" required placeholder="Doe"><br>
 
-        <label>Genre :</label>
-        <input type="radio" name="genre" value="homme" required> Homme
-        <input type="radio" name="genre" value="femme" required> Femme<br>
+        <label>Genre :
+        <input type="radio" name="genre" value="homme" required>Homme
+        <input type="radio" name="genre" value="femme" required>Femme</label><br>
 
-        <label for="email">Email :</label>
-        <input type="email" name="email" required><br>
+        <label for="email" >Email :</label>
+        <input type="email" name="email" required placeholder="johndoe@mail.com"><br>
 
-        <label for="date_naissance">Date de Naissance (JJ/MM/AAAA) :</label>
-        <input type="text" name="date_naissance" required><br>
+        <label for="date_naissance" >Date de Naissance (JJ/MM/AAAA) :</label>
+        <input type="text" name="date_naissance" required placeholder="01/01/1900"><br>
 
-        <label for="telephone">Téléphone :</label>
-        <input type="tel" name="telephone" required><br>
+        <label for="telephone" >Téléphone :</label>
+        <input type="tel" name="telephone" required placeholder="0123456789"><br>
 
         <label for="pays">Pays :</label>
-        <input type="text" name="pays" required><br>
+        <input type="text" name="pays" required placeholder="France"><br>
 
         <label for="question">Question à poser :</label>
         <textarea name="question" required></textarea><br>

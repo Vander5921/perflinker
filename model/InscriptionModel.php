@@ -71,6 +71,7 @@ class InscriptionModel {
         return $age < 18;
     }
     //Utilisation de prepare et stmt pour protection injections SQL
+    //recoupement entre adresse mail et IP, à voir si on ne passe pas QUE par IP pour plus de sécurité
     private function verifierInscriptionMultiple($email, $ip) {
         $requete_verif = "SELECT COUNT(*) as count FROM gpbl WHERE email = ? AND IP = ? AND creatAt >= DATE_SUB(NOW(), INTERVAL 24 HOUR)";
         $stmt_verif = $this->base_de_donnees->prepare($requete_verif);

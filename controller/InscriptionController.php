@@ -1,6 +1,6 @@
 <?php
 
-require_once  'C:\wamp64\www\perflinker\model\Database.php';
+require_once  'C:\wamp64\www\perflinker\model\Database.php'; //chemins relatifs ne marche plus, à améliorer
 require_once  'C:\wamp64\www\perflinker\model\InscriptionModel.php';
 
  
@@ -13,12 +13,12 @@ class InscriptionController {
     }
 
     public function afficherFormulaire() {
-        // Affichage du formulaire
+        // Affiche le formulaire
         include '../view/formulaire.php';
     }
 
     public function traiterFormulaire(array $donneesFormulaire) {
-        // Traitement des données du formulaire
+        // Traite les données du formulaire
         $this->model->inscrire(
             $donneesFormulaire['prenom'],
             $donneesFormulaire['nom'],
@@ -35,7 +35,7 @@ class InscriptionController {
 
 // Configuration de la base de données
 $serveur = 'localhost';
-$utilisateur = 'root'; // Utilisateur de la base de données 
+$utilisateur = 'root';  
 $mot_de_passe = ''; // Mot de passe de la base de données, aucun pour cet exercice
 $base_de_donnees = 'perflinker'; // Nom de la base de données
 
